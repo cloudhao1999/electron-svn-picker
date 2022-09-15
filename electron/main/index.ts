@@ -42,6 +42,11 @@ async function createWindow() {
     },
   })
 
+  if (process.platform === 'darwin') {
+    console.log('__dirname', __dirname)
+    app.dock.setIcon(join(process.env.PUBLIC, 'icon.png'));
+  }
+
   if (app.isPackaged) {
     win.loadFile(indexHtml)
   } else {
