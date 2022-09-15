@@ -1,4 +1,4 @@
-import shell from "shelljs";
+import cmd from 'node-cmd'
 
 /**
  * @description 获取svn更新记录
@@ -6,10 +6,9 @@ import shell from "shelljs";
  * @param {String} projectName 项目名称
  * @param {String} svnPath SVN路径前缀
  */
-export function getSvnEditPath(basePath: string, projectName?: string, svnPath?: string): any[] {
-  shell.config.execPath = (shell.which('node').toString());
-  const result = shell.exec(`svn status ${basePath}`, { silent: true });
-  const stdRecord = result.stdout.split("\n");
+export function getSvnEditPath(basePath: string) {
+  const result = cmd.runSync(`svn status ${basePath}`)
+  const stdRecord = result.data.split("\n");
   return stdRecord;
 }
 
@@ -20,7 +19,7 @@ export function getSvnEditPath(basePath: string, projectName?: string, svnPath?:
  * @param {String} basePath 项目本地路径
  * @param {String} svnPath svn路径前缀
  */
- export function splitRecord(selectRecords: Array<{path: string}>, projectName?: string, basePath?: string, svnPath?: string) {
+export function splitRecord(selectRecords: Array<{ path: string }>, projectName?: string, basePath?: string, svnPath?: string) {
   const statusType = {
     // " ": "无修改",
     A: "新增",
@@ -35,34 +34,34 @@ export function getSvnEditPath(basePath: string, projectName?: string, svnPath?:
     "~": "版本控制下的项目与其它类型的项目重名"
   };
 
-    const recordMap = {};
-    const recordFileMap = {};
-    selectRecords.forEach((item) => {
-      const key = statusType[item.path[0]];
-      const emptyKey = /\s/.test(key);
-      const index = item.path.indexOf(basePath);
-      const filePath = item.path.substring(index);
-      const path = item.path.substring(index).replace(basePath, svnPath);
-      if (!emptyKey && path) {
-        if (recordMap[key]) {
-          recordMap[key].push(path);
-          recordFileMap[key].push(filePath);
-        } else {
-          recordMap[key] = [path];
-          recordFileMap[key] = [filePath];
-        }
+  const recordMap = {};
+  const recordFileMap = {};
+  selectRecords.forEach((item) => {
+    const key = statusType[item.path[0]];
+    const emptyKey = /\s/.test(key);
+    const index = item.path.indexOf(basePath);
+    const filePath = item.path.substring(index);
+    const path = item.path.substring(index).replace(basePath, svnPath);
+    if (!emptyKey && path) {
+      if (recordMap[key]) {
+        recordMap[key].push(path);
+        recordFileMap[key].push(filePath);
+      } else {
+        recordMap[key] = [path];
+        recordFileMap[key] = [filePath];
       }
-    });
+    }
+  });
 
-    // 删除不需要输出的json输出
-    ["", "undefined"].forEach((key) => delete recordFileMap[key]);
-    // 删除不需要的拷贝的文件路径
-    ["删除", "忽略", "", "undefined"].forEach((key) => delete recordFileMap[key]);
+  // 删除不需要输出的json输出
+  ["", "undefined"].forEach((key) => delete recordFileMap[key]);
+  // 删除不需要的拷贝的文件路径
+  ["删除", "忽略", "", "undefined"].forEach((key) => delete recordFileMap[key]);
 
-    // 生成修改新增记录到文件中
-    const fileStr = JSON.stringify(recordMap, null, 2).replace(/\\\\/g, "/").replace(/\\r/g, "");
-    return {
-      fileStr,
-      recordFileMap
-    };
+  // 生成修改新增记录到文件中
+  const fileStr = JSON.stringify(recordMap, null, 2).replace(/\\\\/g, "/").replace(/\\r/g, "");
+  return {
+    fileStr,
+    recordFileMap
+  };
 }
