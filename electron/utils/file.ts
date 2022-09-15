@@ -9,16 +9,16 @@ import path from "path";
  * @param {*} projectName 项目名称
  * @param {*} svnPath svn路径
  */
-export function copyFile(source: string[], currentPath:string, basePath: string, projectName: string, svnPath: string) {
+export function copyFile(source: string[], basePath: string, currentPath:string, prefix: string, projectName: string, svnPath: string, callBackErr: any) {
   source.forEach((item) => {
     item = item.split("\r")[0];
-    const lastIndex = item.split(projectName);
-    const dest = path.resolve(currentPath, basePath + svnPath + lastIndex[1]);
-    console.log('dest',dest)
-    console.log('item',item)
-    if (fs.existsSync(item)) {
-      fs.cp(item, dest, { recursive: true }, (err) => {
-        console.log(err, item, dest);
+    // 正则匹配中间带空格的文件
+    const lastIndex = item.replace(/\s+/, '$').split('$');
+    const dest = path.resolve(currentPath, prefix + svnPath + lastIndex[1]);
+    let from = path.join(basePath, lastIndex[1]);
+    if (fs.existsSync(from)) {
+      fs.cp(from, dest, { recursive: true }, (err) => {
+        callBackErr(err, from, dest);
       });
     }
   });

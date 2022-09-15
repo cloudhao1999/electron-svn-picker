@@ -1,4 +1,5 @@
-import cmd from 'node-cmd'
+import { exec } from 'child_process'
+import fixPath from 'fix-path'
 
 /**
  * @description 获取svn更新记录
@@ -6,10 +7,19 @@ import cmd from 'node-cmd'
  * @param {String} projectName 项目名称
  * @param {String} svnPath SVN路径前缀
  */
-export function getSvnEditPath(basePath: string) {
-  const result = cmd.runSync(`svn status ${basePath}`)
-  const stdRecord = result.data.split("\n");
-  return stdRecord;
+export function getSvnEditPath(basePath: string, callBack?: any) {
+  callBack(process.env.PATH)
+  fixPath()
+  callBack(process.env.PATH)
+  const workerProcess = exec(`svn status .`, { cwd: basePath})
+  let datas = ''
+  workerProcess.stderr.on('data', function (data) {
+    callBack(data)
+  });
+  workerProcess.stdout.on('data', function (data) {
+    datas += data
+    callBack(datas.split('\n'))
+  });
 }
 
 /**

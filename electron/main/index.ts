@@ -53,6 +53,7 @@ async function createWindow() {
 
   if (app.isPackaged) {
     win.loadFile(indexHtml)
+    win.webContents.openDevTools()
   } else {
     win.loadURL(url)
     // Open devTool if the app is not packaged
@@ -114,8 +115,10 @@ ipcMain.on('open-file', (event, arg) => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
     console.log(result.filePaths)
     const filePath = basePath = result.filePaths[0]
-    const recordList = getSvnEditPath(filePath)
-    event.reply('open-file-reply', recordList)
+    event.reply('open-file-reply', [])
+    getSvnEditPath(filePath, (recordList) => {
+      event.reply('open-file-reply', recordList)
+    })
   })
 })
 
@@ -127,8 +130,14 @@ ipcMain.on('split-record', (event, arg) => {
 
 ipcMain.on('gen-fold', (event, arg) => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
-    const filePath = basePath = result.filePaths[0]
-    copyFile(convertObjToArray(globalRecordFileMap), filePath, "./new/", arg.projectName, arg.svnPath)
+    const filePath = result.filePaths[0]
+    copyFile(convertObjToArray(globalRecordFileMap), basePath, filePath, "./new/", arg.projectName, arg.svnPath, (err, item, dest) => {
+      event.reply('gen-fold-err', {
+        err,
+        item,
+        dest
+      })
+    })
     event.reply('gen-fold-reply', { success: true })
   })
 })

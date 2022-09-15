@@ -10,7 +10,7 @@ const ruleFormRef = ref<FormInstance>();
 const multipleSelection = ref<string[]>([]);
 const formData = ref({
   projectName: "front-analy-web",
-  svnPath: "/web/front-analy-web",
+  svnPath: "/web/front-analy-web/",
 });
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const rules = reactive<FormRules>({
@@ -71,6 +71,10 @@ onMounted(() => {
       })
     }
   });
+
+  ipcRenderer.on("gen-fold-err", (event, arg) => {
+    console.log('arg',arg)
+  });
 });
 </script>
 
@@ -101,7 +105,7 @@ onMounted(() => {
   <div style="padding: 0 25px">
     <el-form>
       <el-form-item label="输出目录">
-        <el-input type="textarea" rows="8" :value="jsonFile"></el-input>
+        <el-input type="textarea" rows="8" v-model="jsonFile"></el-input>
       </el-form-item>
     </el-form>
   </div>
