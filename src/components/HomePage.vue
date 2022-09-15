@@ -1,27 +1,54 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { ipcRenderer } from "electron";
 import { openFile } from "../utils/file";
-import { ElTable } from "element-plus";
+import { ElTable, FormInstance, FormRules } from "element-plus";
 
 const projectFileList = ref([]);
 const jsonFile = ref("");
+const ruleFormRef = ref<FormInstance>();
 const multipleSelection = ref<string[]>([]);
-const projectName = ref<string>("")
-const svnPath = ref<string>("/web/")
+const formData = ref({
+  projectName: "",
+  svnPath: "/web/",
+});
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
+const rules = reactive<FormRules>({
+  projectName: [
+    { required: true, message: "项目名称不能为空", trigger: "blur" },
+  ],
+  svnPath: [{ required: true, message: "SVN路径不能为空", trigger: "blur" }],
+});
 
 const handleSelectionChange = (val: string[]) => {
   multipleSelection.value = val;
 };
 
-const splitRecord = () => {
-  ipcRenderer.send('split-record', {
-    list: JSON.stringify(multipleSelection.value),
-    projectName: projectName.value,
-    svnPath: svnPath.value
-  })
-}
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      console.log("submit!");
+    } else {
+      console.log("error submit!", fields);
+    }
+  });
+};
+
+const splitRecord = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      ipcRenderer.send("split-record", {
+        list: JSON.stringify(multipleSelection.value),
+        projectName: formData.value.projectName,
+        svnPath: formData.value.svnPath,
+      });
+    } else {
+      console.log("error submit!", fields);
+    }
+  });
+};
 
 onMounted(() => {
   ipcRenderer.on("open-file-reply", (event, arg) => {
@@ -35,17 +62,39 @@ onMounted(() => {
       .filter((file: { path: string }) => file.path !== "");
   });
 
-  ipcRenderer.on('split-record-reply', (event, arg) => {
-    jsonFile.value = arg
-  })
+  ipcRenderer.on("split-record-reply", (event, arg) => {
+    jsonFile.value = arg;
+  });
 });
 </script>
 
 <template>
-  项目名称：<el-input v-model="projectName"></el-input>
-  SVN路径：<el-input v-model="svnPath"></el-input>
-  输出目录：<el-input type="textarea" :value="jsonFile"></el-input>
-  <el-button type="primary" @click="openFile">选择项目</el-button>
+  <el-form ref="ruleFormRef" :inline="true" :rules="rules" :model="formData">
+    <el-form-item label="项目名称" prop="projectName">
+      <el-input v-model="formData.projectName" placeholder="请输入项目名称" />
+    </el-form-item>
+    <el-form-item label="SVN路径" prop="svnPath">
+      <el-input v-model="formData.svnPath" placeholder="请输入SVN路径" />
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="openFile">选择项目</el-button>
+    </el-form-item>
+    <el-form-item>
+      <el-button
+        :disabled="multipleSelection.length === 0"
+        type="primary"
+        @click="splitRecord(ruleFormRef)"
+        >提取选中文件</el-button
+      >
+    </el-form-item>
+  </el-form>
+  <div style="padding: 0 25px">
+    <el-form>
+      <el-form-item label="输出目录">
+        <el-input type="textarea" rows="8" :value="jsonFile"></el-input>
+      </el-form-item>
+    </el-form>
+  </div>
   <el-table
     ref="multipleTableRef"
     :data="projectFileList"
@@ -55,7 +104,6 @@ onMounted(() => {
     <el-table-column type="selection" width="55" />
     <el-table-column property="path" label="路径" />
   </el-table>
-  <el-button type="primary" @click="splitRecord">提取选中文件</el-button>
 </template>
 
 <style scoped></style>
