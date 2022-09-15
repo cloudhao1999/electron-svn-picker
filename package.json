@@ -13,6 +13,22 @@
   "engines": {
     "node": "^14.18.0 || >=16.0.0"
   },
+  "build": {
+    "productName": "Subversion Helper",
+    "appId": "com.cloudhao.svn-helper",
+    "asar": true,
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "dmg": {
+      "background": "assets/appdmg.png"
+    },
+    "files": [
+      "electron/**/*",
+      "dist/**/*"
+    ]
+  },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.1",
     "electron": "^20.0.2",
