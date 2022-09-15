@@ -13,9 +13,8 @@ export function copyFile(source: string[], basePath: string, currentPath:string,
   source.forEach((item) => {
     item = item.split("\r")[0];
     // 正则匹配中间带空格的文件
-    const lastIndex = item.replace(/\s+/, '$').split('$');
-    const dest = path.resolve(currentPath, prefix + svnPath + lastIndex[1]);
-    let from = path.join(basePath, lastIndex[1]);
+    const dest = path.resolve(currentPath, prefix + svnPath + item);
+    let from = path.join(basePath, item);
     if (fs.existsSync(from)) {
       fs.cp(from, dest, { recursive: true }, (err) => {
         callBackErr(err, from, dest);

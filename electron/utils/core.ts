@@ -1,5 +1,6 @@
 import { exec } from 'child_process'
 import fixPath from 'fix-path'
+import path from 'path'
 
 /**
  * @description 获取svn更新记录
@@ -49,15 +50,14 @@ export function splitRecord(selectRecords: Array<{ path: string }>, projectName?
   selectRecords.forEach((item) => {
     const key = statusType[item.path[0]];
     const emptyKey = /\s/.test(key);
-    const index = item.path.indexOf(basePath);
-    const filePath = item.path.substring(index);
-    const path = item.path.substring(index).replace(basePath, svnPath);
-    if (!emptyKey && path) {
+    const filePath = item.path.replace(/\s+/, '$').split('$')[1];
+    const jsonPath = path.resolve(svnPath, filePath)
+    if (!emptyKey && jsonPath) {
       if (recordMap[key]) {
-        recordMap[key].push(path);
+        recordMap[key].push(jsonPath);
         recordFileMap[key].push(filePath);
       } else {
-        recordMap[key] = [path];
+        recordMap[key] = [jsonPath];
         recordFileMap[key] = [filePath];
       }
     }
