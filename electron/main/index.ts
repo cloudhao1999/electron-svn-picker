@@ -2,6 +2,8 @@ import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 import { getSvnEditPath, splitRecord } from '../utils/core'
+import { copyFile } from '../utils/file'
+import { convertObjToArray } from '../utils/transform'
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -24,6 +26,7 @@ process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST, 
 
 let win: BrowserWindow | null = null
 let basePath = ''
+let globalRecordFileMap = {}
 // Here, you can also use other preload
 const preload = join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL as string
@@ -117,6 +120,15 @@ ipcMain.on('open-file', (event, arg) => {
 })
 
 ipcMain.on('split-record', (event, arg) => {
-  const fileStr = splitRecord(JSON.parse(arg.list), arg.projectName, basePath, arg.svnPath)
+  const { fileStr, recordFileMap } = splitRecord(JSON.parse(arg.list), arg.projectName, basePath, arg.svnPath)
+  globalRecordFileMap = recordFileMap
   event.reply('split-record-reply', fileStr)
+})
+
+ipcMain.on('gen-fold', (event, arg) => {
+  dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
+    const filePath = basePath = result.filePaths[0]
+    copyFile(convertObjToArray(globalRecordFileMap), filePath, "./new/", arg.projectName, arg.svnPath)
+    event.reply('gen-fold-reply', { success: true })
+  })
 })

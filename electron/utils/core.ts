@@ -61,5 +61,8 @@ export function getSvnEditPath(basePath: string, projectName?: string, svnPath?:
 
     // 生成修改新增记录到文件中
     const fileStr = JSON.stringify(recordMap, null, 2).replace(/\\\\/g, "/").replace(/\\r/g, "");
-    return fileStr;
+    return {
+      fileStr,
+      recordFileMap
+    };
 }

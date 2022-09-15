@@ -2,15 +2,15 @@
 import { onMounted, reactive, ref } from "vue";
 import { ipcRenderer } from "electron";
 import { openFile } from "../utils/file";
-import { ElTable, FormInstance, FormRules } from "element-plus";
+import { ElTable, FormInstance, FormRules, ElMessage } from "element-plus";
 
 const projectFileList = ref([]);
 const jsonFile = ref("");
 const ruleFormRef = ref<FormInstance>();
 const multipleSelection = ref<string[]>([]);
 const formData = ref({
-  projectName: "",
-  svnPath: "/web/",
+  projectName: "front-analy-web",
+  svnPath: "/web/front-analy-web",
 });
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const rules = reactive<FormRules>({
@@ -24,14 +24,11 @@ const handleSelectionChange = (val: string[]) => {
   multipleSelection.value = val;
 };
 
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      console.log("submit!");
-    } else {
-      console.log("error submit!", fields);
-    }
+const generateNewFold = () => {
+  ipcRenderer.send("gen-fold", {
+    jsonFile: jsonFile.value,
+    projectName: formData.value.projectName,
+    svnPath: formData.value.svnPath,
   });
 };
 
@@ -65,6 +62,15 @@ onMounted(() => {
   ipcRenderer.on("split-record-reply", (event, arg) => {
     jsonFile.value = arg;
   });
+
+  ipcRenderer.on("gen-fold-reply", (event, arg) => {
+    if (arg.success) {
+      ElMessage({
+        message: '文件生成成功！',
+        type: 'success',
+      })
+    }
+  });
 });
 </script>
 
@@ -77,14 +83,18 @@ onMounted(() => {
       <el-input v-model="formData.svnPath" placeholder="请输入SVN路径" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="openFile">选择项目</el-button>
-    </el-form-item>
-    <el-form-item>
+      <el-button type="primary" @click="openFile">1.选择项目</el-button>
       <el-button
         :disabled="multipleSelection.length === 0"
         type="primary"
         @click="splitRecord(ruleFormRef)"
-        >提取选中文件</el-button
+        >2.提取选中文件</el-button
+      >
+      <el-button
+        :disabled="multipleSelection.length === 0"
+        type="primary"
+        @click="generateNewFold"
+        >3.生成new文件夹</el-button
       >
     </el-form-item>
   </el-form>
