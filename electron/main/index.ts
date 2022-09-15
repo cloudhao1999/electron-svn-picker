@@ -1,7 +1,7 @@
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
-import { getSvnEditPath } from '../utils/core'
+import { getSvnEditPath, splitRecord } from '../utils/core'
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -23,6 +23,7 @@ process.env.DIST = join(__dirname, '../..')
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST, '../public')
 
 let win: BrowserWindow | null = null
+let basePath = ''
 // Here, you can also use other preload
 const preload = join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL as string
@@ -109,8 +110,13 @@ ipcMain.handle('open-win', (event, arg) => {
 ipcMain.on('open-file', (event, arg) => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
     console.log(result.filePaths)
-    const filePath = result.filePaths[0]
+    const filePath = basePath = result.filePaths[0]
     const recordList = getSvnEditPath(filePath)
     event.reply('open-file-reply', recordList)
   })
+})
+
+ipcMain.on('split-record', (event, arg) => {
+  const fileStr = splitRecord(JSON.parse(arg.list), arg.projectName, basePath, arg.svnPath)
+  event.reply('split-record-reply', fileStr)
 })
