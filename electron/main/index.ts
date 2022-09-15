@@ -123,7 +123,7 @@ ipcMain.on('open-file', (event, arg) => {
 })
 
 ipcMain.on('split-record', (event, arg) => {
-  const { fileStr, recordFileMap } = splitRecord(JSON.parse(arg.list), arg.projectName, basePath, arg.svnPath)
+  const { fileStr, recordFileMap } = splitRecord(JSON.parse(arg.list), arg.svnPath)
   globalRecordFileMap = recordFileMap
   event.reply('split-record-reply', fileStr)
 })
@@ -131,13 +131,7 @@ ipcMain.on('split-record', (event, arg) => {
 ipcMain.on('gen-fold', (event, arg) => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
     const filePath = result.filePaths[0]
-    copyFile(convertObjToArray(globalRecordFileMap), basePath, filePath, "./new/", arg.projectName, arg.svnPath, (err, item, dest) => {
-      event.reply('gen-fold-err', {
-        err,
-        item,
-        dest
-      })
-    })
+    copyFile(convertObjToArray(globalRecordFileMap), basePath, filePath, "./new/", arg.svnPath)
     event.reply('gen-fold-reply', { success: true })
   })
 })

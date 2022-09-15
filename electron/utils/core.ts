@@ -9,10 +9,9 @@ import path from 'path'
  * @param {String} svnPath SVN路径前缀
  */
 export function getSvnEditPath(basePath: string, callBack?: any) {
-  callBack(process.env.PATH)
+  // 修复 Mac OS上的环境变量异常
   fixPath()
-  callBack(process.env.PATH)
-  const workerProcess = exec(`svn status .`, { cwd: basePath})
+  const workerProcess = exec(`svn status .`, { cwd: path.resolve(basePath, '../') })
   let datas = ''
   workerProcess.stderr.on('data', function (data) {
     callBack(data)
@@ -30,7 +29,7 @@ export function getSvnEditPath(basePath: string, callBack?: any) {
  * @param {String} basePath 项目本地路径
  * @param {String} svnPath svn路径前缀
  */
-export function splitRecord(selectRecords: Array<{ path: string }>, projectName?: string, basePath?: string, svnPath?: string) {
+export function splitRecord(selectRecords: Array<{ path: string }>, svnPath?: string) {
   const statusType = {
     // " ": "无修改",
     A: "新增",
@@ -50,6 +49,7 @@ export function splitRecord(selectRecords: Array<{ path: string }>, projectName?
   selectRecords.forEach((item) => {
     const key = statusType[item.path[0]];
     const emptyKey = /\s/.test(key);
+    // 正则匹配中间带空格的文件
     const filePath = item.path.replace(/\s+/, '$').split('$')[1];
     const jsonPath = path.resolve(svnPath, filePath)
     if (!emptyKey && jsonPath) {

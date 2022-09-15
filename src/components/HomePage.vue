@@ -10,7 +10,7 @@ const ruleFormRef = ref<FormInstance>();
 const multipleSelection = ref<string[]>([]);
 const formData = ref({
   projectName: "front-analy-web",
-  svnPath: "/web/front-analy-web/",
+  svnPath: "/web/",
 });
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const rules = reactive<FormRules>({
@@ -27,7 +27,6 @@ const handleSelectionChange = (val: string[]) => {
 const generateNewFold = () => {
   ipcRenderer.send("gen-fold", {
     jsonFile: jsonFile.value,
-    projectName: formData.value.projectName,
     svnPath: formData.value.svnPath,
   });
 };
