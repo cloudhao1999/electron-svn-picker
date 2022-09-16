@@ -8,7 +8,6 @@ import alias from './vite/alias'
 
 rmSync('dist', { recursive: true, force: true }) // v14.14.0
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),

@@ -10,8 +10,17 @@ const routes = [
             {
                 path: "dashboard",
                 name: "Dashboard",
-                meta: { menu: { title: "router.dashboard" } },
                 component: () => import("@/views/HomePage.vue")
+            },
+            {
+                path: "setting",
+                name: "Setting",
+                component: () => import("@/views/Setting.vue")
+            },
+            {
+                path: "about",
+                name: "About",
+                component: () => import("@/views/About.vue")
             }
         ]
     },
