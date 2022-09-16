@@ -1,5 +1,5 @@
 {
-  "name": "svn-helper-crm",
+  "name": "Subversion 小助手",
   "version": "1.0.0",
   "main": "dist/electron/main/index.js",
   "description": "界面化的svn提取工具🔧",
@@ -14,7 +14,7 @@
     "node": "^14.18.0 || >=16.0.0"
   },
   "build": {
-    "productName": "Subversion Helper",
+    "productName": "Subversion 小助手",
     "appId": "com.cloudhao.svn-helper",
     "asar": false,
     "mac": {
