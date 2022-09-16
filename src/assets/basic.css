@@ -1,0 +1,16 @@
+body {
+  -webkit-app-region: drag;
+}
+button {
+  -webkit-app-region: no-drag;
+}
+
+/*修复火狐浏览器的滚轮样式问题*/
+* {
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  /*隐藏滚轮*/
+  display: none;
+}
