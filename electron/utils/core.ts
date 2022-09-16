@@ -11,7 +11,7 @@ import path from 'path'
 export function getSvnEditPath(basePath: string, callBack?: any) {
   // 修复 Mac OS上的环境变量异常
   fixPath()
-  const workerProcess = exec(`svn status .`, { cwd: path.resolve(basePath, '../') })
+  const workerProcess = exec(`svn status .`, { cwd: path.resolve(basePath, './') })
   let datas = ''
   workerProcess.stderr.on('data', function (data) {
     callBack(data)

@@ -14,7 +14,7 @@ export function copyFile(source: string[], cwdPath: string, newPath:string, pref
   source.forEach((item) => {
     item = item.split("\r")[0];
     const dest = path.resolve(newPath, prefix + svnPath + item);
-    let from = path.join(cwdPath,'../', item);
+    let from = path.join(cwdPath,'./', item);
     if (fs.existsSync(from)) {
       fs.cp(from, dest, { recursive: true }, (err) => {
         console.log(err, from, dest);
