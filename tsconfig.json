@@ -9,8 +9,11 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "#/*": ["types/*"]
+    },
     "strict": true,
-    "paths": {},
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "types": ["element-plus/global"]

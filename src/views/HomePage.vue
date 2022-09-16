@@ -85,7 +85,7 @@ onMounted(() => {
   <el-form ref="ruleFormRef" :inline="true" :rules="rules" :model="formData">
     <el-form-item prop="projectName">
       <template #label>
-        <div style="display: flex; align-items: center;">
+        <div class="flex items-center">
         <span>项目名称</span>
         <el-tooltip effect="dark" content="本机项目的名称，不是服务器上的" placement="top">
           <el-icon>
@@ -98,7 +98,7 @@ onMounted(() => {
     </el-form-item>
     <el-form-item prop="svnPath">
       <template #label>
-        <div style="display: flex; align-items: center;">
+        <div class="flex items-center">
         <span>SVN路径</span>
         <el-tooltip effect="dark" content="服务器上的项目根路径，例如/web/front-analy-web/" placement="top">
           <el-icon>
