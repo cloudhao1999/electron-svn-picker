@@ -16,7 +16,7 @@
   "build": {
     "productName": "Subversion Helper",
     "appId": "com.cloudhao.svn-helper",
-    "asar": true,
+    "asar": false,
     "mac": {
       "target": "dmg",
       "icon": "assets/icon.icns"
