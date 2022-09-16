@@ -34,7 +34,9 @@ const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
   win = new BrowserWindow({
-    title: 'Main window',
+    title: 'Subversion小助手',
+    titleBarStyle: 'hidden',
+    trafficLightPosition: { x: 10, y: 10 },
     icon: join(process.env.PUBLIC, 'favicon.ico'),
     webPreferences: {
       preload,

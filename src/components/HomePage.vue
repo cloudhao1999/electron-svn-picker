@@ -128,7 +128,7 @@ onMounted(() => {
   <div style="padding: 0 25px">
     <el-form>
       <el-form-item label="输出目录">
-        <el-input type="textarea" rows="8" v-model="jsonFile"></el-input>
+        <el-input type="textarea" rows="8" :value="jsonFile"></el-input>
       </el-form-item>
     </el-form>
   </div>
