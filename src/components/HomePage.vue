@@ -6,6 +6,7 @@ import { ElTable, FormInstance, FormRules, ElMessage } from "element-plus";
 
 const projectFileList = ref([]);
 const jsonFile = ref("");
+const step3 = ref(false);
 const ruleFormRef = ref<FormInstance>();
 const multipleSelection = ref<string[]>([]);
 const formData = ref({
@@ -60,6 +61,8 @@ onMounted(() => {
 
   ipcRenderer.on("split-record-reply", (event, arg) => {
     jsonFile.value = arg;
+    ElMessage.success("拆分成功");
+    step3.value = true;
   });
 
   ipcRenderer.on("gen-fold-reply", (event, arg) => {
@@ -94,7 +97,7 @@ onMounted(() => {
         >2.提取选中文件</el-button
       >
       <el-button
-        :disabled="multipleSelection.length === 0"
+        :disabled="multipleSelection.length === 0 || !step3"
         type="primary"
         @click="generateNewFold"
         >3.生成new文件夹</el-button
