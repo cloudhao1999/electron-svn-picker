@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@element-plus/icons-vue': ^2.0.9
   '@vitejs/plugin-vue': ^3.0.1
   electron: ^20.0.2
   electron-builder: ^23.3.3
@@ -15,6 +16,7 @@ specifiers:
   vue-tsc: ^0.40.1
 
 dependencies:
+  '@element-plus/icons-vue': 2.0.9_vue@3.2.39
   element-plus: 2.2.16_vue@3.2.39
   fix-path: 4.0.0
   iconv-lite: 0.6.3

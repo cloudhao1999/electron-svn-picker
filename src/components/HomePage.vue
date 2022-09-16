@@ -3,6 +3,7 @@ import { onMounted, reactive, ref } from "vue";
 import { ipcRenderer } from "electron";
 import { openFile } from "../utils/file";
 import { ElTable, FormInstance, FormRules, ElMessage } from "element-plus";
+import { QuestionFilled } from "@element-plus/icons-vue";
 
 const projectFileList = ref([]);
 const jsonFile = ref("");
@@ -68,24 +69,44 @@ onMounted(() => {
   ipcRenderer.on("gen-fold-reply", (event, arg) => {
     if (arg.success) {
       ElMessage({
-        message: '文件生成成功！',
-        type: 'success',
-      })
+        message: "文件生成成功！",
+        type: "success",
+      });
     }
   });
 
   ipcRenderer.on("gen-fold-err", (event, arg) => {
-    console.log('arg',arg)
+    console.log("arg", arg);
   });
 });
 </script>
 
 <template>
   <el-form ref="ruleFormRef" :inline="true" :rules="rules" :model="formData">
-    <el-form-item label="项目名称" prop="projectName">
+    <el-form-item prop="projectName">
+      <template #label>
+        <div style="display: flex; align-items: center;">
+        <span>项目名称</span>
+        <el-tooltip effect="dark" content="本机项目的名称，不是服务器上的" placement="top">
+          <el-icon>
+            <QuestionFilled color="#409eff"/>
+          </el-icon>
+        </el-tooltip>
+        </div>
+      </template>
       <el-input v-model="formData.projectName" placeholder="请输入项目名称" />
     </el-form-item>
-    <el-form-item label="SVN路径" prop="svnPath">
+    <el-form-item prop="svnPath">
+      <template #label>
+        <div style="display: flex; align-items: center;">
+        <span>SVN路径</span>
+        <el-tooltip effect="dark" content="服务器上的项目根路径，例如/web/front-analy-web/" placement="top">
+          <el-icon>
+            <QuestionFilled color="#409eff"/>
+          </el-icon>
+        </el-tooltip>
+        </div>
+      </template>
       <el-input v-model="formData.svnPath" placeholder="请输入SVN路径" />
     </el-form-item>
     <el-form-item>
