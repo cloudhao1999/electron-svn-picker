@@ -1,6 +1,6 @@
 {
   "name": "svn-helper-crm",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "dist/electron/main/index.js",
   "description": "界面化的svn提取工具🔧",
   "author": "cloudhao1999",
