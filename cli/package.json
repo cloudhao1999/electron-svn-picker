@@ -1,6 +1,6 @@
 {
   "name": "svn-helper-crm",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "description": "svn record helper",
   "type": "module",
   "main": "index.mjs",
