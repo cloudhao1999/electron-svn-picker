@@ -25,7 +25,6 @@
       "background": "assets/appdmg.png"
     },
     "files": [
-      "electron/**/*",
       "dist/**/*"
     ]
   },
