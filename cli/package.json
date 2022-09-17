@@ -1,6 +1,6 @@
 {
   "name": "svn-helper-cli",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "description": "svn record helper",
   "type": "module",
   "main": "index.mjs",
@@ -24,7 +24,7 @@
   ],
   "author": "yunhao",
   "license": "ISC",
-  "repository": "cloudhao1999/svn-helper-view",
+  "repository": "cloudhao1999/svn-helper",
   "dependencies": {
     "inquirer": "^8.0.0",
     "shelljs": "^0.8.5"
