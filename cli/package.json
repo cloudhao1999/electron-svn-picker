@@ -1,0 +1,53 @@
+{
+  "name": "svn-helper-crm",
+  "version": "2.7.1",
+  "description": "svn record helper",
+  "type": "module",
+  "main": "index.mjs",
+  "bin": {
+    "crm3": "bin/index.mjs"
+  },
+  "engines": {
+    "node": ">= 16.7.0"
+  },
+  "scripts": {
+    "preview": "node ./bin/index.mjs",
+    "dev": "node index.mjs",
+    "watch": "rollup -c -w",
+    "build": "rollup -c",
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "svn"
+  ],
+  "author": "yunhao",
+  "license": "ISC",
+  "repository": "cloudhao1999/svn-helper",
+  "dependencies": {
+    "inquirer": "^8.0.0",
+    "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-json": "^4.1.0",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "rollup": "^2.79.0",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{mjs}": [
+      "prettier --write"
+    ]
+  }
+}
