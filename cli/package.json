@@ -19,7 +19,8 @@
     "prepare": "husky install"
   },
   "keywords": [
-    "svn"
+    "svn",
+    "cli"
   ],
   "author": "yunhao",
   "license": "ISC",
