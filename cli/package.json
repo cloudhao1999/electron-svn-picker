@@ -24,7 +24,7 @@
   ],
   "author": "yunhao",
   "license": "ISC",
-  "repository": "cloudhao1999/svn-helper",
+  "repository": "cloudhao1999/svn-helper-view",
   "dependencies": {
     "inquirer": "^8.0.0",
     "shelljs": "^0.8.5"
