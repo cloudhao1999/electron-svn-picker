@@ -10,14 +10,14 @@
 
 ```bash
 # 全局安装包
-npm install -g svn-helper-crm
+npm install -g svn-helper-cli
 ```
 
 3.使用脚手架工具
 
 ```bash
 # 使用指令
-crm3
+crm
 
 # 根据指令提示输入
 请输入项目名称：输入你当前的项目
