@@ -1,11 +1,11 @@
 {
-  "name": "svn-helper-crm",
+  "name": "svn-helper-cli",
   "version": "2.7.3",
   "description": "svn record helper",
   "type": "module",
   "main": "index.mjs",
   "bin": {
-    "crm3": "bin/index.mjs"
+    "crm": "bin/index.mjs"
   },
   "engines": {
     "node": ">= 16.7.0"
