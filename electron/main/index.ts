@@ -4,6 +4,7 @@ import { join } from 'path'
 import { getSvnEditPath, splitRecord } from '../utils/core'
 import { copyFile } from '../utils/file'
 import { convertObjToArray } from '../utils/transform'
+import Store from 'electron-store'
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -31,6 +32,7 @@ let globalRecordFileMap = {}
 const preload = join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL as string
 const indexHtml = join(process.env.DIST, 'index.html')
+const store = new Store()
 
 async function createWindow() {
   win = new BrowserWindow({
@@ -135,4 +137,14 @@ ipcMain.on('gen-fold', (event, arg) => {
     copyFile(convertObjToArray(globalRecordFileMap), basePath, filePath, "./new/", arg.svnPath)
     event.reply('gen-fold-reply', { success: true })
   })
+})
+
+ipcMain.on('save-record', (event, arg) => {
+  store.set('record', arg)
+  event.reply('save-record-reply', { success: true })
+})
+
+ipcMain.on('get-record', (event, arg) => {
+  const record = store.get('record')
+  event.reply('get-record-reply', record)
 })

@@ -14,7 +14,6 @@ const formData = ref({
   projectName: "front-analy-web",
   svnPath: "/web/front-analy-web/",
 });
-const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const rules = reactive<FormRules>({
   projectName: [
     { required: true, message: "项目名称不能为空", trigger: "blur" },
@@ -141,7 +140,6 @@ onMounted(() => {
     </el-form>
   </div>
   <el-table
-    ref="multipleTableRef"
     :data="projectFileList"
     height="400px"
     @selection-change="handleSelectionChange"
