@@ -18,10 +18,14 @@ import pkg from "../../package.json";
       <span>Made by</span>
       <a
         class="pl-2 text-blue-500 font-bold"
+        target="_blank"
         href="https://github.com/cloudhao1999"
         >cloudhao1999</a
       >、
-      <a class="text-blue-500 font-bold" href="https://github.com/Cathy-wei"
+      <a
+        class="text-blue-500 font-bold"
+        target="_blank"
+        href="https://github.com/Cathy-wei"
         >Cathy-wei</a
       >
     </p>
