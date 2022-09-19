@@ -2,17 +2,19 @@
 import { onMounted, reactive, ref } from "vue";
 import { ipcRenderer } from "electron";
 import { openFile } from "../utils/file";
-import { ElTable, FormInstance, FormRules, ElMessage } from "element-plus";
+import { ElTable, FormInstance, FormRules, ElMessage, ElSelect, ElOption } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
 
 const projectFileList = ref([]);
 const jsonFile = ref("");
 const step3 = ref(false);
 const ruleFormRef = ref<FormInstance>();
+const projectNameList = ref<any[]>([]);
+const svnPathList = ref<any[]>([]);
 const multipleSelection = ref<string[]>([]);
 const formData = ref({
-  projectName: "front-analy-web",
-  svnPath: "/web/front-analy-web/",
+  projectName: "",
+  svnPath: "",
 });
 const rules = reactive<FormRules>({
   projectName: [
@@ -48,6 +50,8 @@ const splitRecord = async (formEl: FormInstance | undefined) => {
 };
 
 onMounted(() => {
+  ipcRenderer.send("get-record");
+
   ipcRenderer.on("open-file-reply", (event, arg) => {
     console.log("recordList", arg);
     projectFileList.value = arg
@@ -61,7 +65,6 @@ onMounted(() => {
 
   ipcRenderer.on("split-record-reply", (event, arg) => {
     jsonFile.value = arg;
-    ElMessage.success("拆分成功");
     step3.value = true;
   });
 
@@ -77,11 +80,25 @@ onMounted(() => {
   ipcRenderer.on("gen-fold-err", (event, arg) => {
     console.log("arg", arg);
   });
+
+  ipcRenderer.on("get-record-reply", (event, arg) => {
+    let argList = JSON.parse(arg);
+    if (Array.isArray(argList)) {
+      projectNameList.value = argList.map((item: any) => item.projectName);
+      svnPathList.value = argList.map((item: any) => item.svnPath);
+    }
+  });
 });
 </script>
 
 <template>
-  <el-form class="mt-9" ref="ruleFormRef" :inline="true" :rules="rules" :model="formData">
+  <el-form
+    class="mt-9"
+    ref="ruleFormRef"
+    :inline="true"
+    :rules="rules"
+    :model="formData"
+  >
     <el-form-item prop="projectName">
       <template #label>
         <div class="flex items-center">
@@ -97,7 +114,14 @@ onMounted(() => {
           </el-tooltip>
         </div>
       </template>
-      <el-input v-model="formData.projectName" placeholder="请输入项目名称" />
+      <el-select v-model="formData.projectName" placeholder="请选择项目名称">
+        <el-option
+          v-for="item in projectNameList"
+          :key="item"
+          :label="item"
+          :value="item"
+        ></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item prop="svnPath">
       <template #label>
@@ -114,7 +138,14 @@ onMounted(() => {
           </el-tooltip>
         </div>
       </template>
-      <el-input v-model="formData.svnPath" placeholder="请输入SVN路径" />
+      <el-select v-model="formData.svnPath" placeholder="请选择SVN路径">
+        <el-option
+          v-for="item in svnPathList"
+          :key="item"
+          :label="item"
+          :value="item"
+        ></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="openFile">1.选择项目</el-button>

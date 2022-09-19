@@ -2,6 +2,7 @@
 import { ipcRenderer } from "electron";
 import { FormInstance, FormRules } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
+import { QuestionFilled } from "@element-plus/icons-vue";
 
 const ruleFormRef = ref<FormInstance>();
 const formData = ref({
