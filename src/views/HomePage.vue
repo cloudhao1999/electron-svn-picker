@@ -172,7 +172,6 @@ onMounted(() => {
   </div>
   <el-table
     :data="projectFileList"
-    height="400px"
     @selection-change="handleSelectionChange"
   >
     <el-table-column type="selection" width="55" />

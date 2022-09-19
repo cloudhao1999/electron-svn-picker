@@ -104,7 +104,7 @@ onMounted(() => {
       </el-form>
     </div>
     <div>
-      <el-table :data="recordList" height="400px">
+      <el-table :data="recordList">
         <el-table-column property="projectName" label="项目名称" />
         <el-table-column property="svnPath" label="SVN路径" />
         <el-table-column fixed="right" label="操作" width="120">
