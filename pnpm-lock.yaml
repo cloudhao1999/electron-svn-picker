@@ -2,42 +2,38 @@ lockfileVersion: 5.4
 
 specifiers:
   '@element-plus/icons-vue': ^2.0.9
-  '@vitejs/plugin-vue': ^3.0.1
+  '@vitejs/plugin-vue': ^3.1.0
   autoprefixer: ^10.4.11
-  electron: ^20.0.2
+  electron: ^20.1.4
   electron-builder: ^23.3.3
   electron-store: ^8.1.0
-  element-plus: ^2.2.16
+  element-plus: ^2.2.17
   fix-path: ^4.0.0
-  iconv-lite: ^0.6.3
-  node-cmd: ^5.0.0
   postcss: ^8.4.16
   tailwindcss: ^3.1.8
-  typescript: ^4.7.4
-  vite: ^3.0.8
+  typescript: ^4.8.3
+  vite: ^3.1.2
   vite-plugin-electron: ^0.9.3
-  vue: ^3.2.37
+  vue: ^3.2.39
   vue-router: '4'
-  vue-tsc: ^0.40.1
+  vue-tsc: ^0.40.13
 
 dependencies:
   '@element-plus/icons-vue': 2.0.9_vue@3.2.39
   electron-store: 8.1.0
-  element-plus: 2.2.16_vue@3.2.39
+  element-plus: 2.2.17_vue@3.2.39
   fix-path: 4.0.0
-  iconv-lite: 0.6.3
-  node-cmd: 5.0.0
   vue-router: 4.1.5_vue@3.2.39
 
 devDependencies:
-  '@vitejs/plugin-vue': 3.1.0_vite@3.1.0+vue@3.2.39
+  '@vitejs/plugin-vue': 3.1.0_vite@3.1.2+vue@3.2.39
   autoprefixer: 10.4.11_postcss@8.4.16
   electron: 20.1.4
   electron-builder: 23.3.3
   postcss: 8.4.16
   tailwindcss: 3.1.8_postcss@8.4.16
   typescript: 4.8.3
-  vite: 3.1.0
+  vite: 3.1.2
   vite-plugin-electron: 0.9.3
   vue: 3.2.39
   vue-tsc: 0.40.13_typescript@4.8.3
@@ -296,14 +292,14 @@ packages:
     dev: true
     optional: true
 
-  /@vitejs/plugin-vue/3.1.0_vite@3.1.0+vue@3.2.39:
+  /@vitejs/plugin-vue/3.1.0_vite@3.1.2+vue@3.2.39:
     resolution: {integrity: sha512-fmxtHPjSOEIRg6vHYDaem+97iwCUg/uSIaTzp98lhELt2ISOQuDo2hbkBdXod0g15IhfPMQmAxh4heUks2zvDA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 3.1.0
+      vite: 3.1.2
       vue: 3.2.39
     dev: true
 
@@ -1266,8 +1262,8 @@ packages:
       - supports-color
     dev: true
 
-  /element-plus/2.2.16_vue@3.2.39:
-    resolution: {integrity: sha512-rvaTMFIujec9YDC5lyaiQv2XVUCHuhVDq2k+9vQxP78N8Wd07iEOGa9pvEVOO2uYc75l4rSl2RE/IWPH/6Mdzw==}
+  /element-plus/2.2.17_vue@3.2.39:
+    resolution: {integrity: sha512-MGwMIE/q+FFD3kgS23x8HIe5043tmD1cTRwjhIX9o6fim1avFnUkrsfYRvybbz4CkyqSb185EheZS5AUPpXh2g==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
@@ -1912,6 +1908,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
+    dev: true
 
   /ieee754/1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -2307,11 +2304,6 @@ packages:
     dev: true
     optional: true
 
-  /node-cmd/5.0.0:
-    resolution: {integrity: sha512-4sQTJmsS5uZKAPz/Df9fnIbmvOySfGdW+UreH4X5NcAOOpKjaE+K5wf4ehNBbZVPo0vQ36RkRnhhsXXJAT+Syw==}
-    engines: {node: '>=6.4.0'}
-    dev: false
-
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
     dev: true
@@ -2690,6 +2682,7 @@ packages:
 
   /safer-buffer/2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    dev: true
 
   /sanitize-filename/1.6.3:
     resolution: {integrity: sha512-y/52Mcy7aw3gRm7IrcGDFx/bCk4AhRh2eI9luHOQM86nZsqwiRkkq2GekHXBBD+SmPidc8i2PqtYZl+pWJ8Oeg==}
@@ -3069,8 +3062,8 @@ packages:
       vite-plugin-electron-renderer: 0.9.3
     dev: true
 
-  /vite/3.1.0:
-    resolution: {integrity: sha512-YBg3dUicDpDWFCGttmvMbVyS9ydjntwEjwXRj2KBFwSB8SxmGcudo1yb8FW5+M/G86aS8x828ujnzUVdsLjs9g==}
+  /vite/3.1.2:
+    resolution: {integrity: sha512-wTDKPkiVbeT+drTPdkuvjVIC/2vKKUc1w3qNOuwgpyvPCZF6fvdxB5v5WEcCsqaYea0zrwA4+XialJKCHM3oVQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
