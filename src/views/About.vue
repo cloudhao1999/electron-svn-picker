@@ -13,6 +13,15 @@ import pkg from "../../package.json";
     <p class="mt-1">
       {{ pkg.version }}
     </p>
+    <p class="text-xl font-bold mt-5">项目地址</p>
+    <p class="mt-1">
+      <a
+        class="text-blue-500 font-bold"
+        target="_blank"
+        href="https://github.com/cloudhao1999/svn-helper"
+        >Subversion 小助手</a
+      >
+    </p>
     <p class="text-xl font-bold mt-5">贡献者</p>
     <p class="mt-1">
       <span>Made by</span>
