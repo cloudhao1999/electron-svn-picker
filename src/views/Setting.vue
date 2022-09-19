@@ -3,7 +3,7 @@
 
 <template>
     <div>
-        <span class="text-xl font-bold">设置</span>
+        <p class="text-xl font-bold mt-5">设置</p>
     </div>
 </template>
 
