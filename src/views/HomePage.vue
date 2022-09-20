@@ -43,8 +43,6 @@ const splitRecord = async (formEl: FormInstance | undefined) => {
         projectName: formData.value.projectName,
         svnPath: formData.value.svnPath,
       });
-    } else {
-      console.log("error submit!", fields);
     }
   });
 };
@@ -53,7 +51,6 @@ onMounted(() => {
   ipcRenderer.send("get-record");
 
   ipcRenderer.on("open-file-reply", (event, arg) => {
-    console.log("recordList", arg);
     projectFileList.value = arg
       .map((file: string) => {
         return {
@@ -77,9 +74,7 @@ onMounted(() => {
     }
   });
 
-  ipcRenderer.on("gen-fold-err", (event, arg) => {
-    console.log("arg", arg);
-  });
+  ipcRenderer.on("gen-fold-err", (event, arg) => {});
 
   ipcRenderer.on("get-record-reply", (event, arg) => {
     let argList = JSON.parse(arg);

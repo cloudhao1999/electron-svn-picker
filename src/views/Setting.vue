@@ -24,8 +24,6 @@ const saveRecord = async (formEl: FormInstance | undefined) => {
     if (valid) {
       recordList.value.push(formData.value);
       ipcRenderer.send("save-record", JSON.stringify(recordList.value));
-    } else {
-      console.log("error submit!", fields);
     }
   });
 };
@@ -39,7 +37,6 @@ function changeFileMinimum(value: CheckboxValueType) {
     ...options.value,
     fileMinimum: value,
   };
-  console.log(options.value);
   ipcRenderer.send("save-options", JSON.stringify(options.value));
 }
 
@@ -66,13 +63,11 @@ onMounted(() => {
 
   ipcRenderer.on("get-options-reply", (event, arg) => {
     options.value = JSON.parse(arg);
-    console.log(options.value);
     if (options.value.fileMinimum) {
       fileMinimum.value = true
     } else {
       fileMinimum.value = false
     }
-    console.log(fileMinimum.value);
   });
 });
 </script>

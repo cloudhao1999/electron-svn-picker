@@ -13,9 +13,7 @@ export function copyFile(source, basePath, projectName, svnPath) {
     const lastIndex = item.split(projectName);
     const dest = path.resolve(process.cwd(), basePath + svnPath + lastIndex[1]);
     if (fs.existsSync(item)) {
-      fs.cp(item, dest, { recursive: true }, (err) => {
-        console.log(err, item, dest);
-      });
+      fs.cp(item, dest, { recursive: true }, (err) => {});
     }
   });
 }
@@ -28,6 +26,5 @@ export function copyFile(source, basePath, projectName, svnPath) {
 export function writeFile(filename, content) {
   fs.writeFile(filename, content, (err) => {
     if (err) throw err;
-    console.log("The file has been saved!");
   });
 }

@@ -1,6 +1,6 @@
 {
   "name": "svn-helper-cli",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "description": "svn record helper",
   "type": "module",
   "main": "index.mjs",

@@ -53,7 +53,6 @@ async function createWindow() {
   })
 
   if (process.platform === 'darwin') {
-    console.log('__dirname', __dirname)
     app.dock.setIcon(join(process.env.PUBLIC, 'icon.png'));
   }
 
@@ -118,7 +117,6 @@ ipcMain.handle('open-win', (event, arg) => {
 
 ipcMain.on('open-file', (event, arg) => {
   dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
-    console.log(result.filePaths)
     const filePath = basePath = result.filePaths[0]
     event.reply('open-file-reply', [])
     getSvnEditPath(filePath, (recordList) => {

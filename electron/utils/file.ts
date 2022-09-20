@@ -19,14 +19,11 @@ export function copyFile(source: string[], cwdPath: string, newPath:string, pref
     if (fileMinimum) {
       const svnPathArr = svnPath.split("/")
       svnPath = '/' + svnPathArr[svnPathArr.length - 2] + '/'
-      console.log('svnPathArr',svnPathArr)
     }
     const dest = path.resolve(newPath, prefix + svnPath + item);
     let from = path.join(cwdPath,'./', item);
     if (fs.existsSync(from)) {
-      fs.cp(from, dest, { recursive: true }, (err) => {
-        console.log(err, from, dest);
-      });
+      fs.cp(from, dest, { recursive: true }, (err) => {});
     }
   });
 }
@@ -39,6 +36,5 @@ export function copyFile(source: string[], cwdPath: string, newPath:string, pref
 export function writeFile(filename, content) {
   fs.writeFile(filename, content, (err) => {
     if (err) throw err;
-    console.log("The file has been saved!");
   });
 }
