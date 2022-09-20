@@ -38,6 +38,8 @@ async function createWindow() {
   win = new BrowserWindow({
     title: 'Subversion小助手',
     titleBarStyle: 'hiddenInset',
+    width: 1024,
+    height: 679,
     trafficLightPosition: { x: 10, y: 10 },
     icon: join(process.env.PUBLIC, 'favicon.ico'),
     webPreferences: {
