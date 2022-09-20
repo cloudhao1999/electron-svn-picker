@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog, Menu, MenuItem } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 import { getSvnEditPath, splitRecord } from '../utils/core'
@@ -75,6 +75,28 @@ async function createWindow() {
     return { action: 'deny' }
   })
 }
+
+const template = [
+  {
+    label: 'Subversion 小助手',
+    submenu: [
+      {
+        label: '关于 Subversion 小助手',
+        role: 'about'
+      },
+    ]
+  },
+  {
+    label: '视图',
+    submenu: [
+      { role: 'reload', label: '重新加载' },
+      { role: 'forceReload', label: '强制重载' },
+      { role: 'toggleDevTools', label: '切换开发者工具' },
+    ]
+  },
+] as any[]
+const m = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(m);
 
 app.whenReady().then(createWindow)
 
