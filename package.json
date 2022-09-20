@@ -1,6 +1,6 @@
 {
   "name": "svn-helper",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "dist/electron/main/index.js",
   "description": "界面化的svn提取工具🔧",
   "author": "cloudhao1999",
@@ -36,6 +36,8 @@
     "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8",
     "typescript": "^4.8.3",
+    "unplugin-auto-import": "^0.11.2",
+    "unplugin-vue-components": "^0.22.7",
     "vite": "^3.1.2",
     "vite-plugin-electron": "^0.9.3",
     "vue": "^3.2.39",
