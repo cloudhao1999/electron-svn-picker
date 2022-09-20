@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { store } from "../main";
 
 /**
  * @description 复制文件到指定目录
@@ -13,6 +14,13 @@ import path from "path";
 export function copyFile(source: string[], cwdPath: string, newPath:string, prefix: string, svnPath: string, callBackErr?: any) {
   source.forEach((item) => {
     item = item.split("\r")[0];
+    const options = store.get('options') as string;
+    const { fileMinimum } = JSON.parse(options)
+    if (fileMinimum) {
+      const svnPathArr = svnPath.split("/")
+      svnPath = '/' + svnPathArr[svnPathArr.length - 2] + '/'
+      console.log('svnPathArr',svnPathArr)
+    }
     const dest = path.resolve(newPath, prefix + svnPath + item);
     let from = path.join(cwdPath,'./', item);
     if (fs.existsSync(from)) {

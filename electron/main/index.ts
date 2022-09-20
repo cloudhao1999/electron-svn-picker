@@ -32,7 +32,7 @@ let globalRecordFileMap = {}
 const preload = join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL as string
 const indexHtml = join(process.env.DIST, 'index.html')
-const store = new Store()
+export const store = new Store()
 
 async function createWindow() {
   win = new BrowserWindow({
@@ -147,4 +147,14 @@ ipcMain.on('save-record', (event, arg) => {
 ipcMain.on('get-record', (event, arg) => {
   const record = store.get('record')
   event.reply('get-record-reply', record)
+})
+
+ipcMain.on('save-options', (event, arg) => {
+  store.set('options', arg)
+  event.reply('save-options-reply', { success: true })
+})
+
+ipcMain.on('get-options', (event, arg) => {
+  const options = store.get('options')
+  event.reply('get-options-reply', options)
 })

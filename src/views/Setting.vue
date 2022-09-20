@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ipcRenderer } from "electron";
-import { FormInstance, FormRules } from "element-plus";
+import { CheckboxValueType, FormInstance, FormRules } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { QuestionFilled } from "@element-plus/icons-vue";
 
 const ruleFormRef = ref<FormInstance>();
+const options = ref<any>({})
+const fileMinimum = ref(false)
 const formData = ref({
   projectName: "",
   svnPath: "",
@@ -32,11 +34,25 @@ function deleteRecord(record: any) {
   ipcRenderer.send("save-record", JSON.stringify(recordList.value));
 }
 
+function changeFileMinimum(value: CheckboxValueType) {
+  options.value = {
+    ...options.value,
+    fileMinimum: value,
+  };
+  console.log(options.value);
+  ipcRenderer.send("save-options", JSON.stringify(options.value));
+}
+
 onMounted(() => {
   ipcRenderer.send("get-record");
+  ipcRenderer.send("get-options");
 
   ipcRenderer.on("save-record-reply", (event, arg) => {
     ipcRenderer.send("get-record");
+  });
+
+  ipcRenderer.on("save-options-reply", (event, arg) => {
+    ipcRenderer.send("get-options");
   });
 
   ipcRenderer.on("get-record-reply", (event, arg) => {
@@ -46,6 +62,17 @@ onMounted(() => {
     } else {
       recordList.value = [];
     }
+  });
+
+  ipcRenderer.on("get-options-reply", (event, arg) => {
+    options.value = JSON.parse(arg);
+    console.log(options.value);
+    if (options.value.fileMinimum) {
+      fileMinimum.value = true
+    } else {
+      fileMinimum.value = false
+    }
+    console.log(fileMinimum.value);
   });
 });
 </script>
@@ -97,6 +124,23 @@ onMounted(() => {
             </div>
           </template>
           <el-input v-model="formData.svnPath" placeholder="请输入SVN路径" />
+        </el-form-item>
+        <el-form-item>
+          <template #label>
+            <div class="flex items-center">
+              <span>去除部分前缀</span>
+              <el-tooltip
+                effect="dark"
+                content="默认为关闭，如果你的svn路径是/web/project/，那么生成的文件路径就是.../new/web/project/，如果开启，那么生成的文件路径就是.../new/project/"
+                placement="top"
+              >
+                <el-icon>
+                  <QuestionFilled color="#409eff" />
+                </el-icon>
+              </el-tooltip>
+            </div>
+          </template>
+            <el-checkbox @change="changeFileMinimum" v-model="fileMinimum"/>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="saveRecord(ruleFormRef)">保存记录</el-button>
