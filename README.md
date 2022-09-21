@@ -14,7 +14,7 @@
 │   ├── appdmg.png
 │   └── icon.icns
 ├── auto-imports.d.ts
-├── cli
+├── cli                               配套Cli
 │   ├── README.md
 │   ├── bin
 │   │   └── index.mjs
@@ -26,7 +26,7 @@
 │   ├── pnpm-lock.yaml
 │   ├── rollup.config.js
 │   ├── transform.mjs
-│   └── utils
+│   └── utils                         Cli工具库
 │       ├── core.mjs
 │       ├── file.mjs
 │       ├── platform.mjs
@@ -34,11 +34,11 @@
 ├── components.d.ts
 ├── electron
 │   ├── electron-env.d.ts
-│   ├── main
+│   ├── main                          Electron主进程
 │   │   └── index.ts
 │   ├── preload
 │   │   └── index.ts
-│   └── utils
+│   └── utils                         工具库
 │       ├── core.ts
 │       ├── file.ts
 │       └── transform.ts
@@ -56,7 +56,7 @@
 │   │   └── basic.css
 │   ├── components
 │   ├── env.d.ts
-│   ├── layouts
+│   ├── layouts                       布局文件
 │   │   ├── common-page.vue
 │   │   ├── default
 │   │   │   └── menu
@@ -64,11 +64,11 @@
 │   │   └── pages
 │   │       └── index.vue
 │   ├── main.ts
-│   ├── router
+│   ├── router                        路由文件
 │   │   └── index.ts
-│   ├── utils
+│   ├── utils                         工具库
 │   │   └── file.ts
-│   └── views
+│   └── views                         主界面
 │       ├── About.vue
 │       ├── HomePage.vue
 │       └── Setting.vue
@@ -76,8 +76,8 @@
 ├── tsconfig.json
 ├── tsconfig.node.json
 ├── vite
-│   └── alias.ts  vite别名配置
-└── vite.config.ts  vite配置文件
+│   └── alias.ts                      vite别名配置
+└── vite.config.ts                    vite配置文件
 ```
 ### 功能截图
 ![Subversion](https://cdn.staticaly.com/gh/cloudhao1999/image-hosting@master/20220917/image.6af9dlzfce40.webp)
