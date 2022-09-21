@@ -5,12 +5,12 @@ import { openFile } from "../utils/file";
 import { ElTable, FormInstance, FormRules, ElMessage, ElSelect, ElOption } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
 
-const projectFileList = ref([]);
-const jsonFile = ref("");
-const step3 = ref(false);
+const projectFileList = ref<{path: string}[]>([]);
+const jsonFile = ref<string>("");
+const generateDisabled = ref<boolean>(false);
 const ruleFormRef = ref<FormInstance>();
-const projectNameList = ref<any[]>([]);
-const svnPathList = ref<any[]>([]);
+const projectNameList = ref<string[]>([]);
+const svnPathList = ref<string[]>([]);
 const multipleSelection = ref<string[]>([]);
 const formData = ref({
   projectName: "",
@@ -62,7 +62,7 @@ onMounted(() => {
 
   ipcRenderer.on("split-record-reply", (event, arg) => {
     jsonFile.value = arg;
-    step3.value = true;
+    generateDisabled.value = true;
   });
 
   ipcRenderer.on("gen-fold-reply", (event, arg) => {
@@ -151,7 +151,7 @@ onMounted(() => {
         >2.提取选中文件</el-button
       >
       <el-button
-        :disabled="multipleSelection.length === 0 || !step3"
+        :disabled="multipleSelection.length === 0 || !generateDisabled"
         type="primary"
         @click="generateNewFold"
         >3.生成new文件夹</el-button

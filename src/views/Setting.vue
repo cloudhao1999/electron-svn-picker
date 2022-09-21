@@ -1,23 +1,34 @@
 <script setup lang="ts">
 import { ipcRenderer } from "electron";
-import { CheckboxValueType, FormInstance, FormRules } from "element-plus";
+import { FormInstance, FormRules } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { QuestionFilled } from "@element-plus/icons-vue";
 
+type formDataType = {
+  projectName: string;
+  svnPath: string;
+};
+
+type optionsType = {
+  fileMinimum: boolean;
+  [key: string]: any;
+}
+
 const ruleFormRef = ref<FormInstance>();
-const options = ref<any>({})
+const options = ref<optionsType>()
 const fileMinimum = ref(false)
-const formData = ref({
+const formData = ref<formDataType>({
   projectName: "",
   svnPath: "",
 });
-const recordList = ref<any[]>([]);
+const recordList = ref<formDataType[]>([]);
 const rules = reactive<FormRules>({
   projectName: [
     { required: true, message: "项目名称不能为空", trigger: "blur" },
   ],
   svnPath: [{ required: true, message: "SVN路径不能为空", trigger: "blur" }],
 });
+
 const saveRecord = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
@@ -27,12 +38,13 @@ const saveRecord = async (formEl: FormInstance | undefined) => {
     }
   });
 };
+
 function deleteRecord(record: any) {
   recordList.value = recordList.value.filter((item) => item !== record);
   ipcRenderer.send("save-record", JSON.stringify(recordList.value));
 }
 
-function changeFileMinimum(value: CheckboxValueType) {
+function changeFileMinimum(value: any) {
   options.value = {
     ...options.value,
     fileMinimum: value,
@@ -63,7 +75,7 @@ onMounted(() => {
 
   ipcRenderer.on("get-options-reply", (event, arg) => {
     options.value = JSON.parse(arg);
-    if (options.value.fileMinimum) {
+    if (options.value?.fileMinimum) {
       fileMinimum.value = true
     } else {
       fileMinimum.value = false
