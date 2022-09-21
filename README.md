@@ -76,8 +76,8 @@
 ├── tsconfig.json
 ├── tsconfig.node.json
 ├── vite
-│   └── alias.ts
-└── vite.config.ts
+│   └── alias.ts  vite别名配置
+└── vite.config.ts  vite配置文件
 ```
 ### 功能截图
 ![Subversion](https://cdn.staticaly.com/gh/cloudhao1999/image-hosting@master/20220917/image.6af9dlzfce40.webp)
