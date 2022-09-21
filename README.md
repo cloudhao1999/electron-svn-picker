@@ -5,5 +5,79 @@
 1. 下载最新版本的`SubversionHelper`，解压后双击`SubversionHelper.exe`运行，MacOS用户请双击`SubversionHelper.app`运行。
 2. 点击左侧`设置`按钮，设置`项目名称`、`SVN路径`。
 3. 点击左侧`主页`按钮，按照界面提示进行操作。
+### 目录结构
+```bash
+.
+├── LICENSE
+├── README.md
+├── assets
+│   ├── appdmg.png
+│   └── icon.icns
+├── auto-imports.d.ts
+├── cli
+│   ├── README.md
+│   ├── bin
+│   │   └── index.mjs
+│   ├── core.mjs
+│   ├── file.mjs
+│   ├── index.mjs
+│   ├── package.json
+│   ├── platform.mjs
+│   ├── pnpm-lock.yaml
+│   ├── rollup.config.js
+│   ├── transform.mjs
+│   └── utils
+│       ├── core.mjs
+│       ├── file.mjs
+│       ├── platform.mjs
+│       └── transform.mjs
+├── components.d.ts
+├── electron
+│   ├── electron-env.d.ts
+│   ├── main
+│   │   └── index.ts
+│   ├── preload
+│   │   └── index.ts
+│   └── utils
+│       ├── core.ts
+│       ├── file.ts
+│       └── transform.ts
+├── electron-builder.json5
+├── index.html
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.js
+├── public
+│   ├── favicon.ico
+│   └── icon.png
+├── src
+│   ├── App.vue
+│   ├── assets
+│   │   └── basic.css
+│   ├── components
+│   ├── env.d.ts
+│   ├── layouts
+│   │   ├── common-page.vue
+│   │   ├── default
+│   │   │   └── menu
+│   │   │       └── index.vue
+│   │   └── pages
+│   │       └── index.vue
+│   ├── main.ts
+│   ├── router
+│   │   └── index.ts
+│   ├── utils
+│   │   └── file.ts
+│   └── views
+│       ├── About.vue
+│       ├── HomePage.vue
+│       └── Setting.vue
+├── tailwind.config.js
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite
+│   └── alias.ts
+└── vite.config.ts
+```
 ### 功能截图
 ![Subversion](https://cdn.staticaly.com/gh/cloudhao1999/image-hosting@master/20220917/image.6af9dlzfce40.webp)
