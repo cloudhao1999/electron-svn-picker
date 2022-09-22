@@ -1,6 +1,6 @@
 {
   "name": "svn-helper",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "dist/electron/main/index.js",
   "description": "界面化的svn提取工具🔧",
   "author": "cloudhao1999",

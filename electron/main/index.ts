@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, dialog, Menu, MenuItem } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog, Menu, MenuItem, globalShortcut } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 import { getSvnEditPath, splitRecord } from '../utils/core'
@@ -84,6 +84,13 @@ const template = [
         label: '关于 Subversion 小助手',
         role: 'about'
       },
+    ]
+  },
+  {
+    label: "编辑",
+    submenu: [
+      { label: "复制", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+      { label: "粘贴", accelerator: "CmdOrCtrl+V", selector: "paste:" },
     ]
   },
   {
