@@ -2,16 +2,26 @@
 import { onMounted, reactive, ref } from "vue";
 import { ipcRenderer } from "electron";
 import { openFile } from "../utils/file";
-import { ElTable, FormInstance, FormRules, ElMessage, ElSelect, ElOption } from "element-plus";
+import {
+  ElTable,
+  FormInstance,
+  FormRules,
+  ElMessage,
+  ElSelect,
+  ElOption,
+} from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
 
-const projectFileList = ref<{path: string}[]>([]);
+const projectFileList = ref<{ path: string }[]>([]);
 const jsonFile = ref<string>("");
 const generateDisabled = ref<boolean>(false);
 const ruleFormRef = ref<FormInstance>();
 const projectNameList = ref<string[]>([]);
 const svnPathList = ref<string[]>([]);
 const multipleSelection = ref<string[]>([]);
+const Store = window.require("electron-store");
+
+const store = new Store();
 const formData = ref({
   projectName: "",
   svnPath: "",
@@ -47,8 +57,17 @@ const splitRecord = async (formEl: FormInstance | undefined) => {
   });
 };
 
+const getRecord = () => {
+  const record = store.get("record");
+  let argList = JSON.parse(record);
+  if (Array.isArray(argList)) {
+    projectNameList.value = argList.map((item: any) => item.projectName);
+    svnPathList.value = argList.map((item: any) => item.svnPath);
+  }
+};
+
 onMounted(() => {
-  ipcRenderer.send("get-record");
+  getRecord()
 
   ipcRenderer.on("open-file-reply", (event, arg) => {
     projectFileList.value = arg
@@ -75,14 +94,6 @@ onMounted(() => {
   });
 
   ipcRenderer.on("gen-fold-err", (event, arg) => {});
-
-  ipcRenderer.on("get-record-reply", (event, arg) => {
-    let argList = JSON.parse(arg);
-    if (Array.isArray(argList)) {
-      projectNameList.value = argList.map((item: any) => item.projectName);
-      svnPathList.value = argList.map((item: any) => item.svnPath);
-    }
-  });
 });
 </script>
 
@@ -165,10 +176,7 @@ onMounted(() => {
       </el-form-item>
     </el-form>
   </div>
-  <el-table
-    :data="projectFileList"
-    @selection-change="handleSelectionChange"
-  >
+  <el-table :data="projectFileList" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" />
     <el-table-column property="path" label="路径" />
   </el-table>

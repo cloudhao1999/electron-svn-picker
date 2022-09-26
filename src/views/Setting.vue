@@ -17,6 +17,8 @@ type optionsType = {
 const ruleFormRef = ref<FormInstance>();
 const options = ref<optionsType>()
 const fileMinimum = ref(false)
+const Store = window.require("electron-store");
+const store = new Store();
 const formData = ref<formDataType>({
   projectName: "",
   svnPath: "",
@@ -52,8 +54,18 @@ function changeFileMinimum(value: any) {
   ipcRenderer.send("save-options", JSON.stringify(options.value));
 }
 
+function getRecord() {
+  const record = store.get("record");
+  let argList = JSON.parse(record);
+    if (Array.isArray(argList)) {
+      recordList.value = argList;
+    } else {
+      recordList.value = [];
+    }
+};
+
 onMounted(() => {
-  ipcRenderer.send("get-record");
+  getRecord()
   ipcRenderer.send("get-options");
 
   ipcRenderer.on("save-record-reply", (event, arg) => {
@@ -62,15 +74,6 @@ onMounted(() => {
 
   ipcRenderer.on("save-options-reply", (event, arg) => {
     ipcRenderer.send("get-options");
-  });
-
-  ipcRenderer.on("get-record-reply", (event, arg) => {
-    let argList = JSON.parse(arg);
-    if (Array.isArray(argList)) {
-      recordList.value = argList;
-    } else {
-      recordList.value = [];
-    }
   });
 
   ipcRenderer.on("get-options-reply", (event, arg) => {

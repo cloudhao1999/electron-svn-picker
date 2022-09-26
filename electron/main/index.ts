@@ -52,6 +52,8 @@ async function createWindow() {
     },
   })
 
+  Store.initRenderer();
+
   if (process.platform === 'darwin') {
     app.dock.setIcon(join(process.env.PUBLIC, 'icon.png'));
   }
@@ -171,11 +173,6 @@ ipcMain.on('gen-fold', (event, arg) => {
 ipcMain.on('save-record', (event, arg) => {
   store.set('record', arg)
   event.reply('save-record-reply', { success: true })
-})
-
-ipcMain.on('get-record', (event, arg) => {
-  const record = store.get('record')
-  event.reply('get-record-reply', record)
 })
 
 ipcMain.on('save-options', (event, arg) => {
