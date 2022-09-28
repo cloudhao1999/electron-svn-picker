@@ -31,19 +31,29 @@ const rules = reactive<FormRules>({
   svnPath: [{ required: true, message: "SVN路径不能为空", trigger: "blur" }],
 });
 
-const saveRecord = async (formEl: FormInstance | undefined) => {
+const handleSaveRecord = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
       recordList.value.push(formData.value);
-      ipcRenderer.send("save-record", JSON.stringify(recordList.value));
+      saveRecord(JSON.stringify(recordList.value))
+      getRecord()
     }
   });
 };
 
+function saveRecord(record: string) {
+  store.set('record', record)
+}
+
+function saveOptions(options: string) {
+  store.set('options', options)
+}
+
 function deleteRecord(record: any) {
   recordList.value = recordList.value.filter((item) => item !== record);
-  ipcRenderer.send("save-record", JSON.stringify(recordList.value));
+  saveRecord(JSON.stringify(recordList.value));
+  getRecord()
 }
 
 function changeFileMinimum(value: any) {
@@ -51,7 +61,8 @@ function changeFileMinimum(value: any) {
     ...options.value,
     fileMinimum: value,
   };
-  ipcRenderer.send("save-options", JSON.stringify(options.value));
+  saveOptions(JSON.stringify(options.value));
+  getOptions()
 }
 
 function getRecord() {
@@ -64,26 +75,20 @@ function getRecord() {
     }
 };
 
-onMounted(() => {
-  getRecord()
-  ipcRenderer.send("get-options");
-
-  ipcRenderer.on("save-record-reply", (event, arg) => {
-    ipcRenderer.send("get-record");
-  });
-
-  ipcRenderer.on("save-options-reply", (event, arg) => {
-    ipcRenderer.send("get-options");
-  });
-
-  ipcRenderer.on("get-options-reply", (event, arg) => {
-    options.value = JSON.parse(arg);
+function getOptions() {
+  const optionsStr = store.get('options')
+  options.value = JSON.parse(optionsStr);
     if (options.value?.fileMinimum) {
       fileMinimum.value = true
     } else {
       fileMinimum.value = false
     }
-  });
+}
+
+onMounted(() => {
+  getRecord()
+  getOptions()
+
 });
 </script>
 
@@ -153,7 +158,7 @@ onMounted(() => {
             <el-checkbox @change="changeFileMinimum" v-model="fileMinimum"/>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="saveRecord(ruleFormRef)">保存记录</el-button>
+          <el-button type="primary" @click="handleSaveRecord(ruleFormRef)">保存记录</el-button>
         </el-form-item>
       </el-form>
     </div>

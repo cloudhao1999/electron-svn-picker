@@ -1,9 +1,6 @@
-import { app, BrowserWindow, shell, ipcMain, dialog, Menu, MenuItem, globalShortcut } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
-import { getSvnEditPath, splitRecord } from '../utils/core'
-import { copyFile } from '../utils/file'
-import { convertObjToArray } from '../utils/transform'
 import Store from 'electron-store'
 
 // Disable GPU Acceleration for Windows 7
@@ -76,6 +73,9 @@ async function createWindow() {
     if (url.startsWith('https:')) shell.openExternal(url)
     return { action: 'deny' }
   })
+
+  require('@electron/remote/main').initialize();
+  require('@electron/remote/main').enable(win.webContents);
 }
 
 const template = [
@@ -86,6 +86,13 @@ const template = [
         label: '关于 Subversion 小助手',
         role: 'about'
       },
+      {
+        label: '退出',
+        accelerator: 'Command+Q',
+        click: () => {
+          app.quit()
+        }
+      }
     ]
   },
   {
@@ -144,43 +151,4 @@ ipcMain.handle('open-win', (event, arg) => {
   } else {
     childWindow.loadURL(`${url}/#${arg}`)
   }
-})
-
-ipcMain.on('open-file', (event, arg) => {
-  dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
-    const filePath = basePath = result.filePaths[0]
-    event.reply('open-file-reply', [])
-    getSvnEditPath(filePath, (recordList) => {
-      event.reply('open-file-reply', recordList)
-    })
-  })
-})
-
-ipcMain.on('split-record', (event, arg) => {
-  const { fileStr, recordFileMap } = splitRecord(JSON.parse(arg.list), arg.svnPath)
-  globalRecordFileMap = recordFileMap
-  event.reply('split-record-reply', fileStr)
-})
-
-ipcMain.on('gen-fold', (event, arg) => {
-  dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
-    const filePath = result.filePaths[0]
-    copyFile(convertObjToArray(globalRecordFileMap), basePath, filePath, "./new/", arg.svnPath)
-    event.reply('gen-fold-reply', { success: true })
-  })
-})
-
-ipcMain.on('save-record', (event, arg) => {
-  store.set('record', arg)
-  event.reply('save-record-reply', { success: true })
-})
-
-ipcMain.on('save-options', (event, arg) => {
-  store.set('options', arg)
-  event.reply('save-options-reply', { success: true })
-})
-
-ipcMain.on('get-options', (event, arg) => {
-  const options = store.get('options')
-  event.reply('get-options-reply', options)
 })

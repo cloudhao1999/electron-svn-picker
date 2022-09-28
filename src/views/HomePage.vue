@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
 import { ipcRenderer } from "electron";
-import { openFile } from "../utils/file";
+import { copyFile } from "../utils/file";
 import {
   ElTable,
   FormInstance,
@@ -11,15 +11,20 @@ import {
   ElOption,
 } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
+import { getSvnEditPath, splitRecord } from "@/utils/core";
+import { convertObjToArray } from "@/utils/transform";
 
 const projectFileList = ref<{ path: string }[]>([]);
 const jsonFile = ref<string>("");
+const basePath = ref<string>("")
 const generateDisabled = ref<boolean>(false);
 const ruleFormRef = ref<FormInstance>();
 const projectNameList = ref<string[]>([]);
 const svnPathList = ref<string[]>([]);
-const multipleSelection = ref<string[]>([]);
+const multipleSelection = ref<{path: string}[]>([]);
+const globalRecordFileMap = ref({});
 const Store = window.require("electron-store");
+const remote = window.require('@electron/remote')
 
 const store = new Store();
 const formData = ref({
@@ -33,26 +38,45 @@ const rules = reactive<FormRules>({
   svnPath: [{ required: true, message: "SVN路径不能为空", trigger: "blur" }],
 });
 
-const handleSelectionChange = (val: string[]) => {
+const handleSelectionChange = (val: {path: string}[]) => {
   multipleSelection.value = val;
 };
 
 const generateNewFold = () => {
-  ipcRenderer.send("gen-fold", {
-    jsonFile: jsonFile.value,
-    svnPath: formData.value.svnPath,
-  });
+  remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then((result: any) => {
+    const filePath = result.filePaths[0]
+    copyFile(store, convertObjToArray(globalRecordFileMap.value), basePath.value, filePath, "./new/", filePath)
+    ElMessage({
+        message: "文件生成成功！",
+        type: "success",
+      });
+  })
 };
 
-const splitRecord = async (formEl: FormInstance | undefined) => {
+const openFile = () => {
+  remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then((result: any) => {
+    basePath.value = result.filePaths[0]
+    getSvnEditPath(basePath.value, (recordList: any) => {
+      projectFileList.value = recordList
+      .map((file: string) => {
+        return {
+          path: file,
+        };
+      })
+      .filter((file: { path: string }) => file.path !== "");
+    })
+    
+  })
+}
+
+const handleSplitRecord = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      ipcRenderer.send("split-record", {
-        list: JSON.stringify(multipleSelection.value),
-        projectName: formData.value.projectName,
-        svnPath: formData.value.svnPath,
-      });
+      const { fileStr, recordFileMap } = splitRecord(multipleSelection.value, formData.value.svnPath)
+      globalRecordFileMap.value = recordFileMap
+      jsonFile.value = fileStr;
+      generateDisabled.value = true;
     }
   });
 };
@@ -70,7 +94,8 @@ onMounted(() => {
   getRecord()
 
   ipcRenderer.on("open-file-reply", (event, arg) => {
-    projectFileList.value = arg
+    basePath.value = arg.filePath
+    projectFileList.value = arg.recordList
       .map((file: string) => {
         return {
           path: file,
@@ -78,22 +103,6 @@ onMounted(() => {
       })
       .filter((file: { path: string }) => file.path !== "");
   });
-
-  ipcRenderer.on("split-record-reply", (event, arg) => {
-    jsonFile.value = arg;
-    generateDisabled.value = true;
-  });
-
-  ipcRenderer.on("gen-fold-reply", (event, arg) => {
-    if (arg.success) {
-      ElMessage({
-        message: "文件生成成功！",
-        type: "success",
-      });
-    }
-  });
-
-  ipcRenderer.on("gen-fold-err", (event, arg) => {});
 });
 </script>
 
@@ -158,7 +167,7 @@ onMounted(() => {
       <el-button
         :disabled="multipleSelection.length === 0"
         type="primary"
-        @click="splitRecord(ruleFormRef)"
+        @click="handleSplitRecord(ruleFormRef)"
         >2.提取选中文件</el-button
       >
       <el-button

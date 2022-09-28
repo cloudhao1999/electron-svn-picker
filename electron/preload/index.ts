@@ -1,3 +1,5 @@
+window.require = require;
+
 function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
   return new Promise(resolve => {
     if (condition.includes(document.readyState)) {
@@ -89,6 +91,5 @@ window.onmessage = ev => {
   ev.data.payload === 'removeLoading' && removeLoading()
 }
 
-window.require = require;
 
 setTimeout(removeLoading, 4999)
