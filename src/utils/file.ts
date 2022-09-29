@@ -15,6 +15,7 @@ const fs = window.require('fs')
       item = item.split("\r")[0];
       const options = store.get('options') as string;
       const { fileMinimum } = JSON.parse(options)
+      debugger
       if (fileMinimum) {
         const svnPathArr = svnPath.split("/")
         svnPath = '/' + svnPathArr[svnPathArr.length - 2] + '/'

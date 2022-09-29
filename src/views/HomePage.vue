@@ -45,7 +45,7 @@ const handleSelectionChange = (val: {path: string}[]) => {
 const generateNewFold = () => {
   remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then((result: any) => {
     const filePath = result.filePaths[0]
-    copyFile(store, convertObjToArray(globalRecordFileMap.value), basePath.value, filePath, "./new/", filePath)
+    copyFile(store, convertObjToArray(globalRecordFileMap.value), basePath.value, filePath, "./new/", formData.value.svnPath)
     ElMessage({
         message: "文件生成成功！",
         type: "success",
