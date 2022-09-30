@@ -37,11 +37,7 @@
 │   ├── main                          Electron主进程
 │   │   └── index.ts
 │   ├── preload
-│   │   └── index.ts
-│   └── utils                         工具库
-│       ├── core.ts
-│       ├── file.ts
-│       └── transform.ts
+│       └── index.ts
 ├── electron-builder.json5
 ├── index.html
 ├── package.json
@@ -66,8 +62,10 @@
 │   ├── main.ts
 │   ├── router                        路由文件
 │   │   └── index.ts
-│   ├── utils                         工具库
-│   │   └── file.ts
+│   └── utils                         工具库
+│   │   ├── core.ts
+│   │   ├── file.ts
+│   │   └── transform.ts
 │   └── views                         主界面
 │       ├── About.vue
 │       ├── HomePage.vue
