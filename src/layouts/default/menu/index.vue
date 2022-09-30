@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ElMenu } from "element-plus";
-import { Menu, Setting, InfoFilled } from "@element-plus/icons-vue";
+import { Menu, Tools, InfoFilled } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -20,7 +20,7 @@ function selectMenu(index: string) {
           <template #title>首页</template>
         </el-menu-item>
         <el-menu-item index="Setting">
-          <el-icon style="width: 100%"><Setting /></el-icon>
+          <el-icon style="width: 100%"><Tools /></el-icon>
           <template #title>设置</template>
         </el-menu-item>
         <el-menu-item index="About">

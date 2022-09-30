@@ -35,9 +35,18 @@ const handleSaveRecord = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      recordList.value.push(formData.value);
-      saveRecord(JSON.stringify(recordList.value))
-      getRecord()
+      const index=recordList.value.findIndex((item:formDataType)=> {
+        return item.projectName==formData.value.projectName.trim() &&
+        item.svnPath==formData.value.svnPath.trim()
+      });
+      if(index<0) recordList.value.push(formData.value);
+      try {
+        saveRecord(JSON.stringify(recordList.value))
+        getRecord()
+      } catch (error) {
+        
+      }
+     
     }
   });
 };
@@ -52,8 +61,13 @@ function saveOptions(options: string) {
 
 function deleteRecord(record: any) {
   recordList.value = recordList.value.filter((item) => item !== record);
-  saveRecord(JSON.stringify(recordList.value));
+  try {
+    saveRecord(JSON.stringify(recordList.value));
   getRecord()
+  } catch (error) {
+    
+  }
+  
 }
 
 function changeFileMinimum(value: any) {
@@ -61,28 +75,43 @@ function changeFileMinimum(value: any) {
     ...options.value,
     fileMinimum: value,
   };
-  saveOptions(JSON.stringify(options.value));
+  try {saveOptions(JSON.stringify(options.value));
   getOptions()
+    
+  } catch (error) {
+    
+  }
+  
 }
 
 function getRecord() {
   const record = store.get("record");
-  let argList = JSON.parse(record);
+  try {
+    let argList = JSON.parse(record);
     if (Array.isArray(argList)) {
       recordList.value = argList;
     } else {
       recordList.value = [];
     }
+  } catch (error) {
+    
+  }
+  
 };
 
 function getOptions() {
   const optionsStr = store.get('options')
-  options.value = JSON.parse(optionsStr);
+  try {
+    options.value = JSON.parse(optionsStr);
     if (options.value?.fileMinimum) {
       fileMinimum.value = true
     } else {
       fileMinimum.value = false
     }
+  } catch (error) {
+    
+  }
+  
 }
 
 onMounted(() => {

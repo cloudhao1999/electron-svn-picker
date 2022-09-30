@@ -51,7 +51,7 @@ export function getSvnEditPath(basePath: string, callBack?: any) {
       const emptyKey = /\s/.test(key);
       // 正则匹配中间带空格的文件
       const filePath = item.path.replace(/\s+/, '$').split('$')[1];
-      const jsonPath = path.resolve(svnPath, filePath)
+      const jsonPath = path.join(svnPath, filePath)
       if (!emptyKey && jsonPath) {
         if (recordMap[key]) {
           recordMap[key].push(jsonPath);
@@ -66,7 +66,7 @@ export function getSvnEditPath(basePath: string, callBack?: any) {
     // 删除不需要输出的json输出
     ["", "undefined"].forEach((key) => delete recordFileMap[key]);
     // 删除不需要的拷贝的文件路径
-    ["删除", "忽略", "", "undefined"].forEach((key) => delete recordFileMap[key]);
+    ["忽略", "", "undefined"].forEach((key) => delete recordFileMap[key]);
   
     // 生成修改新增记录到文件中
     const fileStr = JSON.stringify(recordMap, null, 2).replace(/\\\\/g, "/").replace(/\\r/g, "");
