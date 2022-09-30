@@ -36,7 +36,7 @@
 │   ├── electron-env.d.ts
 │   ├── main                          Electron主进程
 │   │   └── index.ts
-│   ├── preload
+│   └── preload
 │       └── index.ts
 ├── electron-builder.json5
 ├── index.html
