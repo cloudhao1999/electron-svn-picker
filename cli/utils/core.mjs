@@ -51,7 +51,6 @@ function splitRecord(record, projectName, basePath, svnPath) {
         }
       }
     });
-
     // 删除不需要输出的json输出
     ["", "undefined"].forEach((key) => delete recordFileMap[key]);
     // 删除不需要的拷贝的文件路径
