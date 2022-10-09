@@ -5,7 +5,6 @@ const fixPath = window.require('fix-path')
 /**
  * @description 获取svn更新记录
  * @param {String} basePath 项目全路径
- * @param {String} projectName 项目名称
  * @param {String} svnPath SVN路径前缀
  */
 export function getSvnEditPath(basePath: string, callBack?: any) {
@@ -25,8 +24,6 @@ export function getSvnEditPath(basePath: string, callBack?: any) {
 /**
  * @description 将svn提交记录拆分成键值对
  * @param {Array} selectRecords svn记录
- * @param {String} projectName 项目名称
- * @param {String} basePath 项目本地路径
  * @param {String} svnPath svn路径前缀
  */
  export function splitRecord(selectRecords: Array<{ path: string }>, svnPath?: string) {
