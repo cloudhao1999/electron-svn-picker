@@ -10,6 +10,7 @@ import pkg from './package.json'
 import alias from './vite/alias'
 
 rmSync('dist', { recursive: true, force: true }) // v14.14.0
+rmSync('build', { recursive: true, force: true })
 
 export default defineConfig({
   plugins: [
