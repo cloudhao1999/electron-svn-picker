@@ -42,7 +42,7 @@
     "vite": "^3.1.7",
     "vite-plugin-electron": "^0.9.3",
     "vue": "^3.2.40",
-    "vue-tsc": "^1.0.6"
+    "vue-tsc": "^1.0.7"
   },
   "debug": {
     "env": {
