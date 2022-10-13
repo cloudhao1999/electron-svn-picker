@@ -12,7 +12,7 @@ function selectMenu(index: string) {
 </script>
 
 <template>
-  <el-aside width="80px" class="border border-base">
+  <el-aside width="80px" class="border-r">
     <div class="mt-8">
       <el-menu @select="selectMenu" :collapse="true" :default-active="'Dashboard'">
         <el-menu-item index="Dashboard">

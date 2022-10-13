@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, Menu, nativeTheme } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 import Store from 'electron-store'
@@ -74,9 +74,27 @@ async function createWindow() {
     return { action: 'deny' }
   })
 
+  //判断是否为OSX
+  if (process.platform == "darwin") {
+    console.log('is Mac');
+    //当桌面主题更新时
+    nativeTheme.on('updated', () => {
+      console.log('i am changed')
+      if (nativeTheme.shouldUseDarkColors) {
+        win?.webContents.send('theme-change', 'dark')
+      } else {
+        win?.webContents.send('theme-change', 'light')
+      }
+    })
+  } else {
+    console.log('not Mac');
+  }
+
   require('@electron/remote/main').initialize();
   require('@electron/remote/main').enable(win.webContents);
 }
+
+
 
 const template = [
   {
@@ -150,5 +168,20 @@ ipcMain.handle('open-win', (event, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   } else {
     childWindow.loadURL(`${url}/#${arg}`)
+  }
+})
+
+ipcMain.on('theme-change', (event, arg) => {
+  console.log('theme-change', arg);
+  if (arg == 'dark') {
+    win?.webContents.send('theme-change', 'dark')
+  } else if (arg == 'light') {
+    win?.webContents.send('theme-change', 'light')
+  } else {
+    if (nativeTheme.shouldUseDarkColors) {
+      win?.webContents.send('theme-change', 'dark')
+    } else {
+      win?.webContents.send('theme-change', 'light')
+    }
   }
 })

@@ -1,6 +1,6 @@
 {
   "name": "svn-helper",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "main": "dist/electron/main/index.js",
   "description": "界面化的svn提取工具🔧",
   "author": "cloudhao1999",
@@ -42,7 +42,7 @@
     "vite": "^3.1.7",
     "vite-plugin-electron": "^0.9.3",
     "vue": "^3.2.40",
-    "vue-tsc": "^1.0.3"
+    "vue-tsc": "^1.0.6"
   },
   "debug": {
     "env": {
@@ -61,6 +61,7 @@
   "dependencies": {
     "@electron/remote": "^2.0.8",
     "@element-plus/icons-vue": "^2.0.10",
+    "@vueuse/core": "^9.3.0",
     "electron-store": "^8.1.0",
     "element-plus": "^2.2.17",
     "fix-path": "^3.0.0",

@@ -3,6 +3,7 @@ import { ipcRenderer } from "electron";
 import { FormInstance, FormRules } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { QuestionFilled } from "@element-plus/icons-vue";
+import { useDark, useToggle } from "@vueuse/core";
 
 type formDataType = {
   projectName: string;
@@ -12,11 +13,12 @@ type formDataType = {
 type optionsType = {
   fileMinimum: boolean;
   [key: string]: any;
-}
+};
 
 const ruleFormRef = ref<FormInstance>();
-const options = ref<optionsType>()
-const fileMinimum = ref(false)
+const options = ref<optionsType>();
+const theme = ref("light");
+const fileMinimum = ref(false);
 const Store = window.require("electron-store");
 const store = new Store();
 const formData = ref<formDataType>({
@@ -24,6 +26,8 @@ const formData = ref<formDataType>({
   svnPath: "",
 });
 const recordList = ref<formDataType[]>([]);
+const isDark = useDark();
+const toggleDarkMode = useToggle(isDark);
 const rules = reactive<FormRules>({
   projectName: [
     { required: true, message: "项目名称不能为空", trigger: "blur" },
@@ -35,39 +39,40 @@ const handleSaveRecord = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      const index=recordList.value.findIndex((item:formDataType)=> {
-        return item.projectName==formData.value.projectName.trim() &&
-        item.svnPath==formData.value.svnPath.trim()
+      const index = recordList.value.findIndex((item: formDataType) => {
+        return (
+          item.projectName == formData.value.projectName.trim() &&
+          item.svnPath == formData.value.svnPath.trim()
+        );
       });
-      if(index<0) recordList.value.push(formData.value);
+      if (index < 0) recordList.value.push(formData.value);
       try {
-        saveRecord(JSON.stringify(recordList.value))
-        getRecord()
-      } catch (error) {
-        
-      }
-     
+        saveRecord(JSON.stringify(recordList.value));
+        getRecord();
+      } catch (error) {}
     }
   });
 };
 
 function saveRecord(record: string) {
-  store.set('record', record)
+  store.set("record", record);
 }
 
 function saveOptions(options: string) {
-  store.set('options', options)
+  store.set("options", options);
 }
+
+const toggleDark = (themeStr: string) => {
+  store.set("theme", themeStr);
+  getTheme();
+};
 
 function deleteRecord(record: any) {
   recordList.value = recordList.value.filter((item) => item !== record);
   try {
     saveRecord(JSON.stringify(recordList.value));
-  getRecord()
-  } catch (error) {
-    
-  }
-  
+    getRecord();
+  } catch (error) {}
 }
 
 function changeFileMinimum(value: any) {
@@ -75,13 +80,10 @@ function changeFileMinimum(value: any) {
     ...options.value,
     fileMinimum: value,
   };
-  try {saveOptions(JSON.stringify(options.value));
-  getOptions()
-    
-  } catch (error) {
-    
-  }
-  
+  try {
+    saveOptions(JSON.stringify(options.value));
+    getOptions();
+  } catch (error) {}
 }
 
 function getRecord() {
@@ -93,31 +95,31 @@ function getRecord() {
     } else {
       recordList.value = [];
     }
-  } catch (error) {
-    
-  }
-  
-};
+  } catch (error) {}
+}
+
+function getTheme() {
+  const themeStr = store.get("theme");
+  theme.value = themeStr || "light";
+  ipcRenderer.send("theme-change", theme.value);
+}
 
 function getOptions() {
-  const optionsStr = store.get('options')
+  const optionsStr = store.get("options");
   try {
     options.value = JSON.parse(optionsStr);
     if (options.value?.fileMinimum) {
-      fileMinimum.value = true
+      fileMinimum.value = true;
     } else {
-      fileMinimum.value = false
+      fileMinimum.value = false;
     }
-  } catch (error) {
-    
-  }
-  
+  } catch (error) {}
 }
 
 onMounted(() => {
-  getRecord()
-  getOptions()
-
+  getRecord();
+  getOptions();
+  getTheme();
 });
 </script>
 
@@ -132,6 +134,17 @@ onMounted(() => {
         :rules="rules"
         :model="formData"
       >
+        <el-form-item prop="darkMode" label="主题">
+          <el-select
+            :model-value="theme"
+            @change="toggleDark"
+            placeholder="请选择"
+          >
+            <el-option label="浅色" value="light"></el-option>
+            <el-option label="深色" value="dark"></el-option>
+            <el-option label="跟随系统" value="auto"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item prop="projectName">
           <template #label>
             <div class="flex items-center">
@@ -184,10 +197,12 @@ onMounted(() => {
               </el-tooltip>
             </div>
           </template>
-            <el-checkbox @change="changeFileMinimum" v-model="fileMinimum"/>
+          <el-checkbox @change="changeFileMinimum" v-model="fileMinimum" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSaveRecord(ruleFormRef)">保存记录</el-button>
+          <el-button type="primary" @click="handleSaveRecord(ruleFormRef)"
+            >保存记录</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -197,7 +212,10 @@ onMounted(() => {
         <el-table-column property="svnPath" label="SVN路径" />
         <el-table-column fixed="right" label="操作" width="120">
           <template #default="scope">
-            <el-button type="danger" size="small" @click="deleteRecord(scope.row)"
+            <el-button
+              type="danger"
+              size="small"
+              @click="deleteRecord(scope.row)"
               >删除</el-button
             >
           </template>
