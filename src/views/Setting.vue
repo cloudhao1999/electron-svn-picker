@@ -3,22 +3,15 @@ import { ipcRenderer } from "electron";
 import { FormInstance, FormRules } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { QuestionFilled } from "@element-plus/icons-vue";
-import { useDark, useToggle } from "@vueuse/core";
 
 type formDataType = {
   projectName: string;
   svnPath: string;
 };
 
-type optionsType = {
-  fileMinimum: boolean;
-  [key: string]: any;
-};
 
 const ruleFormRef = ref<FormInstance>();
-const options = ref<optionsType>();
 const theme = ref("light");
-const fileMinimum = ref(false);
 const Store = window.require("electron-store");
 const store = new Store();
 const formData = ref<formDataType>({
@@ -26,8 +19,6 @@ const formData = ref<formDataType>({
   svnPath: "",
 });
 const recordList = ref<formDataType[]>([]);
-const isDark = useDark();
-const toggleDarkMode = useToggle(isDark);
 const rules = reactive<FormRules>({
   projectName: [
     { required: true, message: "项目名称不能为空", trigger: "blur" },
@@ -75,17 +66,6 @@ function deleteRecord(record: any) {
   } catch (error) {}
 }
 
-function changeFileMinimum(value: any) {
-  options.value = {
-    ...options.value,
-    fileMinimum: value,
-  };
-  try {
-    saveOptions(JSON.stringify(options.value));
-    getOptions();
-  } catch (error) {}
-}
-
 function getRecord() {
   const record = store.get("record");
   try {
@@ -104,21 +84,8 @@ function getTheme() {
   ipcRenderer.send("theme-change", theme.value);
 }
 
-function getOptions() {
-  const optionsStr = store.get("options");
-  try {
-    options.value = JSON.parse(optionsStr);
-    if (options.value?.fileMinimum) {
-      fileMinimum.value = true;
-    } else {
-      fileMinimum.value = false;
-    }
-  } catch (error) {}
-}
-
 onMounted(() => {
   getRecord();
-  getOptions();
   getTheme();
 });
 </script>
@@ -181,23 +148,6 @@ onMounted(() => {
             </div>
           </template>
           <el-input v-model="formData.svnPath" placeholder="请输入SVN路径" />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <div class="flex items-center">
-              <span>去除部分前缀</span>
-              <el-tooltip
-                effect="dark"
-                content="默认为关闭，如果你的svn路径是/web/project/，那么生成的文件路径就是.../new/web/project/，如果开启，那么生成的文件路径就是.../new/project/"
-                placement="top"
-              >
-                <el-icon>
-                  <QuestionFilled color="#409eff" />
-                </el-icon>
-              </el-tooltip>
-            </div>
-          </template>
-          <el-checkbox @change="changeFileMinimum" v-model="fileMinimum" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSaveRecord(ruleFormRef)"
